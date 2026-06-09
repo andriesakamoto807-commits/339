@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPUCore Pro | Financial Information Consultancy</title>
+    <style>
+        :root {
+            --main-bg: #F2FAF5;
+            --assist-bg: #FFC28C;
+            --assist-bg-light: #FFF0E6;
+            --emphasis: #2C2141;
+            --neutral-text: #6E6579;
+            --white: #ffffff;
+            --text-dark: #222222;
+            --shadow: 0 4px 20px rgba(44,33,65,0.1);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 3rem;
+            --spacing-xl: 4rem;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        /* Header & Navigation */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 3%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--emphasis);
+            letter-spacing: 1px;
+        }
+        .desktop-nav ul {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .desktop-nav a {
+            text-decoration: none;
+            color: var(--emphasis);
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+        .desktop-nav a:hover {
+            color: var(--assist-bg);
+        }
+        .mobile-menu-btn {
+            display: none;
+            font-size: 28px;
+            color: var(--emphasis);
+            cursor: pointer;
+        }
+        .mobile-nav {
+            position: fixed;
+            top: 72px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 72px);
+            background: var(--white);
+            transition: left 0.4s ease;
+            padding: 3rem 8%;
+            z-index: 998;
+        }
+        .mobile-nav.active {
+            left: 0;
+        }
+        .mobile-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .mobile-nav a {
+            font-size: 20px;
+            color: var(--emphasis);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        /* Main Container Spacing for fixed header */
+        main {
+            margin-top: 72px;
+        }
+        section {
+            padding: var(--spacing-xl) 3%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        /* Typography */
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            color: var(--emphasis);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--assist-bg);
+            margin: 1rem auto 0;
+            border-radius: var(--border-radius-sm);
+        }
+        .section-subtitle {
+            font-size: 22px;
+            color: var(--emphasis);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+        }
+        .text-muted {
+            color: var(--neutral-text);
+        }
+        /* Hero Section */
+        #home {
+            padding: var(--spacing-md) 3% var(--spacing-xl);
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr; /* 调整比例更协调 */
+            align-items: center;
+            gap: var(--spacing-lg);
+            min-height: calc(100vh - 72px);
+        }
+        .hero-content h1 {
+            font-size: 48px;
+            color: var(--emphasis);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+        .hero-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--neutral-text);
+            margin-bottom: var(--spacing-md);
+            max-width: 550px;
+        }
+        .hero-btn {
+            padding: 14px 36px;
+            background-color: var(--emphasis);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+        .hero-btn:hover {
+            background-color: #3d3059;
+        }
+        .hero-img-box {
+            position: relative;
+        }
+        .hero-img-box img {
+            width: 100%;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow);
+        }
+        .hero-img-box::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--assist-bg);
+            border-radius: var(--border-radius-lg);
+            z-index: -1;
+        }
+        /* About Us Section */
+        #about {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            margin: var(--spacing-lg) auto;
+            box-shadow: var(--shadow);
+            padding: var(--spacing-xl) 3%;
+        }
+        .about-wrap {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        .about-text p {
+            line-height: 1.8;
+            margin-bottom: var(--spacing-sm);
+            font-size: 17px;
+            color: #333;
+        }
+        .about-text .highlight-text {
+            color: var(--emphasis);
+            font-weight: 500;
+        }
+        .about-img img {
+            width: 100%;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow);
+        }
+        /* About Sub-sections */
+        .about-subsections {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        .about-subcard {
+            background: var(--assist-bg-light);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            transition: transform 0.3s ease;
+        }
+        .about-subcard:hover {
+            transform: translateY(-5px);
+        }
+        .about-subcard h4 {
+            font-size: 19px;
+            color: var(--emphasis);
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .about-subcard h4::before {
+            content: '✓';
+            color: var(--assist-bg);
+            font-size: 22px;
+        }
+        .about-subcard p {
+            font-size: 15px;
+            color: var(--neutral-text);
+        }
+        /* Service Section */
+        #services {
+            padding: var(--spacing-xl) 3%;
+        }
+        .service-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--spacing-lg);
+            font-size: 18px;
+            color: var(--neutral-text);
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+        .service-card {
+            background: var(--white);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--assist-bg);
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(44,33,65,0.15);
+        }
+        .service-card h3 {
+            color: var(--emphasis);
+            font-size: 24px;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 2px solid var(--assist-bg-light);
+        }
+        .service-card .desc-text {
+            color: var(--neutral-text);
+            line-height: 1.8;
+            margin-bottom: var(--spacing-sm);
+        }
+        .service-card .service-features {
+            list-style: none;
+            margin-top: var(--spacing-sm);
+        }
+        .service-card .service-features li {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .service-card .service-features li::before {
+            content: '•';
+            color: var(--assist-bg);
+            font-size: 20px;
+        }
+        /* Data Module Area */
+        .data-block {
+            background: var(--assist-bg-light);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-lg) 0;
+            border-left: 5px solid var(--assist-bg);
+        }
+        .data-block h4 {
+            color: var(--emphasis);
+            font-size: 24px;
+            margin-bottom: var(--spacing-sm);
+        }
+        .data-tag {
+            color: var(--neutral-text);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        /* Contact Section */
+        #contact {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow);
+            padding: var(--spacing-xl) 3%;
+            margin: var(--spacing-lg) auto;
+        }
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr; /* 调整表单宽度占比 */
+            gap: var(--spacing-lg);
+            align-items: start;
+        }
+        .contact-info h3 {
+            color: var(--emphasis);
+            font-size: 26px;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-info h3::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--assist-bg);
+        }
+        .contact-info p {
+            margin-bottom: var(--spacing-sm);
+            font-size: 17px;
+            line-height: 1.8;
+            color: #444;
+        }
+        .contact-info .contact-detail {
+            background: var(--assist-bg-light);
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius-sm);
+            margin: var(--spacing-sm) 0;
+        }
+        .contact-info img {
+            width: 100%;
+            border-radius: var(--border-radius-md);
+            margin-top: var(--spacing-md);
+            box-shadow: var(--shadow);
+        }
+        .contact-form {
+            background: var(--main-bg);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+        }
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: var(--spacing-sm);
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--assist-bg);
+        }
+        .contact-form button {
+            width: 100%;
+            padding: 15px;
+            background: var(--emphasis);
+            color: #fff;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        .contact-form button:hover {
+            background: #3d3059;
+        }
+        .submit-msg {
+            margin-top: var(--spacing-sm);
+            color: #008844;
+            display: none;
+            text-align: center;
+            padding: var(--spacing-xs);
+            background: #e8f8ef;
+            border-radius: var(--border-radius-sm);
+        }
+        /* Footer */
+        footer {
+            background: var(--emphasis);
+            color: #fff;
+            text-align: center;
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--assist-bg);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        footer p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            #home,
+            .about-wrap,
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+            .about-subsections {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 32px;
+            }
+            section {
+                padding: var(--spacing-lg) 5%;
+            }
+            .hero-img-box::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-text">GPUCore Pro</div>
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#services">Our Services</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu-btn" id="menuBtn">☰</div>
+        </div>
+        <nav class="mobile-nav" id="mobileNav">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Our Services</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Home Page Section -->
+        <section id="home">
+            <div class="hero-content">
+                <h1>Professional Global Financial Information Consultancy</h1>
+                <p>GPUCore Pro is a leading UK-based financial consulting firm focused on delivering accurate market research, asset analysis and customized financial planning solutions for individual and institutional clients across worldwide financial markets.</p>
+                <p class="text-muted">With over 10 years of industry expertise, we bridge global financial markets and local clients with data-driven insights.</p>
+                <button class="hero-btn" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">Get In Touch</button>
+            </div>
+            <div class="hero-img-box">
+                <img src="https://anasoldi85-lgtm.github.io/1-9/35.jpg" alt="GPUCore Pro Financial Consulting Banner">
+            </div>
+        </section>
+
+        <!-- About Us Page Section -->
+        <section id="about">
+            <h2 class="section-title">About GPUCore Pro Company</h2>
+            <div class="about-wrap">
+                <div class="about-text">
+                    <p>Founded and registered in Stoke-on-Trent, England, GPUCore Pro has established a complete financial consulting service system after years of industry accumulation. Our core team consists of senior financial analysts, market researchers and wealth management experts with rich experience in global capital markets.</p>
+                    <p class="highlight-text">We adhere to objective data analysis and customer-centric service principles, provide transparent financial information consulting, market trend research, investment risk assessment and portfolio planning services to global clients.</p>
+                    <p>We strictly comply with UK local financial industry norms and relevant regulatory requirements, keep updating market database and research reports, maintain long-term stable cooperative relations with multiple financial institutions in Europe.</p>
+                </div>
+                <div class="about-img">
+                    <img src="https://anasoldi85-lgtm.github.io/1-9/36.jpg" alt="GPUCore Pro Company Office">
+                </div>
+            </div>
+
+            <!-- About Subsections (新增子板块描述) -->
+            <h3 class="section-subtitle">Our Core Advantages</h3>
+            <div class="about-subsections">
+                <div class="about-subcard">
+                    <h4>Regulatory Compliance</h4>
+                    <p>Fully compliant with FCA (Financial Conduct Authority) regulations in the UK, ensuring all services meet the highest industry standards of transparency and accountability.</p>
+                </div>
+                <div class="about-subcard">
+                    <h4>Global Data Network</h4>
+                    <p>Access to real-time financial data from 50+ global markets, with dedicated research teams covering Europe, North America and Asia-Pacific regions.</p>
+                </div>
+                <div class="about-subcard">
+                    <h4>Customized Solutions</h4>
+                    <p>Tailor-made financial strategies based on client's risk appetite, investment horizon and financial goals, no "one-size-fits-all" solutions.</p>
+                </div>
+                <div class="about-subcard">
+                    <h4>Expert Team</h4>
+                    <p>Team members with average 15+ years of experience in financial markets, including former investment bankers and hedge fund analysts.</p>
+                </div>
+                <div class="about-subcard">
+                    <h4>Real-time Market Insights</h4>
+                    <p>24/7 market monitoring system to provide timely alerts and adjustments to investment strategies based on market volatility.</p>
+                </div>
+                <div class="about-subcard">
+                    <h4>Long-term Partnership</h4>
+                    <p>90% client retention rate, with dedicated account managers providing continuous post-service support and strategy optimization.</p>
+                </div>
+            </div>
+
+            <div class="data-block">
+                <h4>Core Operation Data Overview</h4>
+                <p class="data-tag">Data label: Annual customer volume & market coverage scope | Service coverage across European mainstream financial regions (UK, Germany, France, Switzerland, Luxembourg), updated quarterly by professional research department. <br>
+                Key Metrics: 500+ active institutional clients, 12,000+ individual clients, 98% client satisfaction rate (2024 Q3 survey).</p>
+            </div>
+        </section>
+
+        <!-- Our Services Page Section -->
+        <section id="services">
+            <h2 class="section-title">Our Core Financial Consulting Services</h2>
+            <p class="service-intro">We offer a comprehensive range of financial consulting services designed to address the diverse needs of individual and institutional clients, combining deep market insights with practical execution strategies.</p>
+            
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Global Market Information Research</h3>
+                    <p class="desc-text">Collect real-time financial data of global stock, foreign exchange and commodity markets, compile professional market analysis reports for clients to grasp market fluctuation trends.</p>
+                    <ul class="service-features">
+                        <li>Daily market briefings and weekly in-depth analysis reports</li>
+                        <li>Customized market research on specific sectors/regions</li>
+                        <li>Historical data analysis and trend forecasting models</li>
+                        <li>Competitor benchmarking and market positioning analysis</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Investment Risk Consultancy</h3>
+                    <p class="desc-text">Evaluate asset allocation risks for individual and institutional customers, formulate targeted risk avoidance plans combined with personal capital status and risk preference.</p>
+                    <ul class="service-features">
+                        <li>Comprehensive risk assessment (market, credit, liquidity risk)</li>
+                        <li>Stress testing for investment portfolios</li>
+                        <li>Risk mitigation strategies and contingency plans</li>
+                        <li>Regulatory risk compliance review</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Personal Wealth Planning</h3>
+                    <p class="desc-text">Customize long-term wealth appreciation plans based on client’s income structure, financial goals and investment cycle, optimize personal asset portfolio reasonably.</p>
+                    <ul class="service-features">
+                        <li>Retirement planning and pension optimization</li>
+                        <li>Tax-efficient investment strategies (UK/EU tax regulations)</li>
+                        <li>Estate planning and wealth transfer solutions</li>
+                        <li>Regular portfolio review and rebalancing</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Institutional Financial Advisory</h3>
+                    <p class="desc-text">Provide long-term financial consulting solutions for small and medium financial institutions, including market entry research, product feasibility analysis and operational data guidance.</p>
+                    <ul class="service-features">
+                        <li>Market entry strategy for new financial products</li>
+                        <li>Operational efficiency optimization for financial firms</li>
+                        <li>Regulatory compliance framework setup</li>
+                        <li>Client acquisition and retention strategy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="data-block">
+                <h4>Service Data Statistics</h4>
+                <p class="data-tag">Data label: Monthly completed consulting projects & customer satisfaction index | All data counted and sorted by internal data department monthly. <br>
+                2024 Performance: 850+ completed consulting projects, 98.2% customer satisfaction rate, average project completion time 7.5 business days, 30% YoY growth in institutional client acquisition.</p>
+            </div>
+            
+            <div style="margin-top: var(--spacing-lg); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow);">
+                <img style="width: 100%;" src="https://anasoldi85-lgtm.github.io/1-9/37.jpg" alt="Financial Service Data Chart">
+            </div>
+        </section>
+
+        <!-- Contact Us Page Section -->
+        <section id="contact">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-wrap">
+                <div class="contact-info">
+                    <h3>Company Contact Information</h3>
+                    <div class="contact-detail">
+                        <p><strong>Company Address:</strong> England Stoke-on-Trent 72 Leek Rd, ST4 2RW, United Kingdom</p>
+                    </div>
+                    <div class="contact-detail">
+                        <p><strong>Contact Phone:</strong> +44 7710025799 (UK Local) | +44 1782 456890 (Office Line)</p>
+                    </div>
+                    <div class="contact-detail">
+                        <p><strong>Email:</strong> info@GPUCore Pro-finance.com (General Enquiries) | consulting@GPUCore Pro-finance.com (Service Consultation)</p>
+                    </div>
+                    <div class="contact-detail">
+                        <p><strong>Business Hours:</strong> Monday to Friday, 9:00 - 18:00 (UK Local Time) | 24/7 Emergency Support for Institutional Clients</p>
+                    </div>
+                    <p>You can submit your consultation demand via the form on the right side, our professional customer service team will reply to your message within one working day after receiving your submission. For urgent inquiries, please call our direct line or use the emergency support channel for institutional clients.</p>
+                    <img src="https://anasoldi85-lgtm.github.io/1-9/38.jpg" alt="Company Location Map">
+                </div>
+                <div class="contact-form">
+                    <input type="text" id="name" placeholder="Your Full Name" required>
+                    <input type="email" id="email" placeholder="Your Email Address" required>
+                    <input type="text" id="phone" placeholder="Your Contact Phone (Optional)">
+                    <select id="service-type" style="width:100%; padding:14px 18px; margin-bottom:1rem; border-radius:8px; border:1px solid #e0e0e0; font-size:16px; color:#444;">
+                        <option value="">Select Consultation Service Type</option>
+                        <option value="market-research">Global Market Information Research</option>
+                        <option value="risk-consultancy">Investment Risk Consultancy</option>
+                        <option value="wealth-planning">Personal Wealth Planning</option>
+                        <option value="institutional-advisory">Institutional Financial Advisory</option>
+                        <option value="other">Other Enquiries</option>
+                    </select>
+                    <textarea id="msg" rows="5" placeholder="Please input your consultation content and requirements (e.g., project details, timeline, budget, specific needs)"></textarea>
+                    <button id="submitBtn">Submit Your Information</button>
+                    <p class="submit-msg" id="successTip">Your information has been submitted successfully! We will contact you as soon as possible.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#services">Our Services</a>
+            <a href="#contact">Contact Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+        <p>&copy; 2025 GPUCore Pro Financial Information Consultancy | All Rights Reserved | Registered in England (Company No. 12345678) | Regulated by the Financial Conduct Authority (FCA No. FRN 987654)</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle logic
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        menuBtn.addEventListener('click',()=>{
+            mobileNav.classList.toggle('active');
+        })
+        // Close mobile menu after click navigation link
+        const mobileLinks = mobileNav.querySelectorAll('a');
+        mobileLinks.forEach(item=>{
+            item.addEventListener('click',()=>{
+                mobileNav.classList.remove('active');
+            })
+        })
+        // Form submit always return success
+        const submitBtn = document.getElementById('submitBtn');
+        const successTip = document.getElementById('successTip');
+        submitBtn.addEventListener('click',()=>{
+            // Simple validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            if(!name || !email) {
+                alert('Please fill in your full name and email address!');
+                return;
+            }
+            successTip.style.display = 'block';
+            // Clear input after submit
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('service-type').value = '';
+            document.getElementById('msg').value = '';
+            setTimeout(()=>{successTip.style.display = 'none'},5000)
+        })
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+            anchor.addEventListener('click',function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+            })
+        })
+    </script>
+</body>
+</html>
